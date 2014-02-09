@@ -14,14 +14,13 @@ namespace CloudBackup
          private String folderSrc;
         private String folderDst;
         private string password;
-        private ProgressBar progressBar;
+        public event StartWorkHandler startWorkHandler;
 
-        public WorkerRemote(config.Configuration configuration,ProgressBar aProgressBar)
+        public WorkerRemote(config.Configuration configuration)
         {
             this.folderDst = configuration.folderPathOrig;
             this.folderSrc = configuration.folderPathCipher;
             this.password = configuration.password;
-            this.progressBar = aProgressBar;
         }
 
 
@@ -32,13 +31,13 @@ namespace CloudBackup
             Console.WriteLine("nb Files to process: {0}", filesToProcess.Length);
             int count = 0;
             int length = filesToProcess.Length;
-            this.progressBar.Maximum = length;
+            startWorkHandler(this, new worker.StartEventArgs(length, 0));
             foreach (string fileToProcess in filesToProcess)
             {
                 while (!_shouldStop)
                 {
                     count++;
-                    progressBar.Value = count;
+                    startWorkHandler(this, new worker.StartEventArgs(length, count));
                     Console.WriteLine("traitement de {0}/{1}", count, length);
                     if (needDecryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
                     {

@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="worker\StartEventArgs.cs" />
     <Compile Include="worker\Worker.cs" />
     <Compile Include="worker\WorkerBackup.cs" />
     <Compile Include="worker\WorkerRemote.cs" />

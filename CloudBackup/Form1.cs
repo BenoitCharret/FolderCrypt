@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CloudBackup.worker;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +17,8 @@ namespace CloudBackup
         private config.Configuration configuration;
         private Worker worker;
         Thread workerThread;
+
+        
 
         public Form1()
         {
@@ -56,15 +59,23 @@ namespace CloudBackup
             new config.ConfigurationManager().saveConfiguration(configuration);
             if (radioButtonBackup.Checked == true)
             {
-                worker = new WorkerBackup(configuration, progressBar1);
+                worker = new WorkerBackup(configuration);
             }
             else
             {
-                worker = new WorkerRemote(configuration, progressBar1);
+                worker = new WorkerRemote(configuration);
             }
-           workerThread =new Thread(worker.DoWork);
-           workerThread.Start();
+            worker.startWorkHandler += new StartWorkHandler(WorkChanged);
+           //workerThread =new Thread(worker.DoWork);
+           //workerThread.Start();
+            worker.DoWork();
             
+        }
+
+        private void WorkChanged(object sender, StartEventArgs e)
+        {
+            this.progressBar1.Maximum = e.Length;
+            this.progressBar1.Value = e.Count;
         }
 
         private void Form1_Load(object sender, EventArgs e)

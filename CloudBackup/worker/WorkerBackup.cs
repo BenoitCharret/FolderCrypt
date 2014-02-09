@@ -9,19 +9,18 @@ using CloudBackup.file;
 
 namespace CloudBackup
 {
-    class WorkerBackup:Worker
+    class WorkerBackup : Worker
     {
         private String folderSrc;
         private String folderDst;
         private string password;
-        private ProgressBar progressBar;
+        public event StartWorkHandler startWorkHandler;
 
-        public WorkerBackup(config.Configuration configuration,ProgressBar aProgressBar)
+        public WorkerBackup(config.Configuration configuration)
         {
             this.folderDst = configuration.folderPathCipher;
             this.folderSrc = configuration.folderPathOrig;
             this.password = configuration.password;
-            this.progressBar = aProgressBar;
         }
 
         public void DoWork()
@@ -30,17 +29,35 @@ namespace CloudBackup
             Console.WriteLine("nb Files to process: {0}", filesToProcess.Length);
             int count = 0;
             int length = filesToProcess.Length;
-            //this.progressBar.Maximum = length;
+
+            startWorkHandler(this, new worker.StartEventArgs(length,0));
+
             foreach (string fileToProcess in filesToProcess)
             {
                 while (!_shouldStop)
                 {
                     count++;
-                    //progressBar.Value = count;
+                    startWorkHandler(this, new worker.StartEventArgs(length, count));
                     Console.WriteLine("traitement de {0}/{1}", count, length);
-                    if (needEncryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
+                    string encryptPath = FileHelper.encryptPath(fileToProcess, folderSrc, folderDst, password);
+                    if (needEncryption(fileToProcess, encryptPath))
                     {
-                        EncryptionHelper.EncryptFile(password, fileToProcess, FileHelper.encryptPath(fileToProcess,folderSrc,folderDst ,password));
+                        // if dest file already exists but name is not crypted we rename it
+                        if (File.Exists(FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
+                        {
+                            if (File.Exists(encryptPath))
+                            {
+                                File.Delete(FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess));
+                            }
+                            else
+                            {
+                                File.Move(FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess), encryptPath);
+                            }
+                        }
+                        else
+                        {
+                            EncryptionHelper.EncryptFile(password, fileToProcess, encryptPath);
+                        }
                     }
                     break;
                 }
@@ -60,7 +77,7 @@ namespace CloudBackup
             return true;
         }
 
-   
+
     }
 
 
