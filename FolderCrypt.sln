@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteBackup", "CloudBackup\RemoteBackup.csproj", "{E62AD982-046D-48D4-8F51-16659422E3FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderCrypt", "CloudBackup\FolderCrypt.csproj", "{E62AD982-046D-48D4-8F51-16659422E3FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
