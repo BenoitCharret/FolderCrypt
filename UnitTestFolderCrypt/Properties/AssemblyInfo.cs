@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de 
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("CloudBackup")]
+[assembly: AssemblyTitle("UnitTestFolderCrypt")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CloudBackup")]
+[assembly: AssemblyProduct("UnitTestFolderCrypt")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Le GUID suivant est pour l'ID de la typelib si ce projet est exposé à COM
-[assembly: Guid("2c88a122-0c5c-45d9-919e-8b858fa31268")]
+[assembly: Guid("2d8182b0-7467-4a35-8d8f-496229023c1e")]
 
 // Les informations de version pour un assembly se composent des quatre valeurs suivantes :
 //
@@ -29,10 +29,8 @@ using System.Runtime.InteropServices;
 //      Numéro de build
 //      Révision
 //
-// Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut 
+// Vous pouvez spécifier toutes les valeurs ou vous pouvez définir par défaut les numéros de build et de révision 
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("UnitTestFolderCrypt")]

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using CloudBackup.file;
 
 namespace CloudBackup
 {
@@ -37,9 +38,9 @@ namespace CloudBackup
                     count++;
                     progressBar.Value = count;
                     Console.WriteLine("traitement de {0}/{1}", count, length);
-                    if (needEncryption(fileToProcess, getDstFilemame(folderSrc, folderDst, fileToProcess)))
+                    if (needEncryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
                     {
-                        EncryptionHelper.EncryptFile(password, fileToProcess, getDstFilemame(folderSrc, folderDst, fileToProcess));
+                        EncryptionHelper.EncryptFile(password, fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess));
                     }
                     break;
                 }
@@ -59,17 +60,7 @@ namespace CloudBackup
             return true;
         }
 
-        private string getDstFilemame(string folderSrc, string folderDst, string file)
-        {
-            if (file.Contains(folderSrc) == true)
-            {
-                return file.Replace(folderSrc, folderDst);
-            }
-            else
-            {
-                return folderDst + "\\" + file;
-            }
-        }
+   
     }
 
 
