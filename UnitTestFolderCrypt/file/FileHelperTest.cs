@@ -16,6 +16,9 @@ namespace CloudBackup.file
         private static string TEST_PATH_LONG = "c:\\temp\\temp2\\temp3";
         private static string TEST_PATH_LONG_TRALING = "c:\\temp\\temp2\\temp3\\";
 
+        private static string TEST_PATH_CRYPT = "c:\\temp2\\DiAG54akIt86vl8wEIuy0g==\\kmMUhoGoRY0m9mJ2w1amIw==";
+
+
         private static string DST_PATH="c:\\temp2";
         private string KEY_AES = "unitTestForFolderCrypt";
 
@@ -111,6 +114,52 @@ namespace CloudBackup.file
             for (int i = 1; i < paths.Length; i++)
             {
                 Assert.AreEqual(cryptPaths[i], EncryptionHelper.EncryptString(paths[i], KEY_AES));
+            }
+        }
+
+
+
+
+        [TestMethod]
+        public void TestMethodDecryptPathNullPath()
+        {
+            Assert.IsNull(FileHelper.decryptPath(null, "toto", "titi", "tata"));
+        }
+
+        [TestMethod]
+        public void TestMethodDecryptPathNullSrcPath()
+        {
+            Assert.IsNull(FileHelper.decryptPath("toto", null, "titi", "tata"));
+        }
+
+        [TestMethod]
+        public void TestMethodDecryptPathNullDstPath()
+        {
+            Assert.IsNull(FileHelper.decryptPath("tutu", "toto", null, "tata"));
+        }
+
+        [TestMethod]
+        public void TestMethodDecryptPathNullKey()
+        {
+            Assert.IsNull(FileHelper.decryptPath("tutu", "toto", "titi", null));
+        }
+        [TestMethod]
+        public void TestMethodDecryptBasic()
+        {
+            Assert.AreNotEqual(FileHelper.translateFilemame(DST_PATH, SRC_PATH, TEST_PATH_CRYPT), FileHelper.decryptPath(TEST_PATH_CRYPT, DST_PATH, SRC_PATH, KEY_AES));
+        }
+        
+        [TestMethod]
+        public void testMethodDecryptComplex()
+        {
+            string clainPath = FileHelper.decryptPath(TEST_PATH_CRYPT, DST_PATH, SRC_PATH, KEY_AES);
+            string[] clainPaths = clainPath.Replace(SRC_PATH, "").Split('\\');
+            string[] paths = TEST_PATH_CRYPT.Replace(DST_PATH, "").Split('\\');
+
+            Assert.AreEqual(clainPaths.Length, paths.Length);
+            for (int i = 1; i < paths.Length; i++)
+            {
+                Assert.AreEqual(clainPaths[i], EncryptionHelper.DecryptString(paths[i], KEY_AES));
             }
         }
     }

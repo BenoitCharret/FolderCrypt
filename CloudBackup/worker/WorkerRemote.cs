@@ -42,7 +42,7 @@ namespace CloudBackup
                     Console.WriteLine("traitement de {0}/{1}", count, length);
                     if (needDecryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
                     {
-                        EncryptionHelper.DecryptFile(password, fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess));
+                        EncryptionHelper.DecryptFile(password, fileToProcess, FileHelper.decryptPath(fileToProcess,folderSrc,folderDst,password));                        
                     }
                     break;
                 }

@@ -30,17 +30,17 @@ namespace CloudBackup
             Console.WriteLine("nb Files to process: {0}", filesToProcess.Length);
             int count = 0;
             int length = filesToProcess.Length;
-            this.progressBar.Maximum = length;
+            //this.progressBar.Maximum = length;
             foreach (string fileToProcess in filesToProcess)
             {
                 while (!_shouldStop)
                 {
                     count++;
-                    progressBar.Value = count;
+                    //progressBar.Value = count;
                     Console.WriteLine("traitement de {0}/{1}", count, length);
                     if (needEncryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
                     {
-                        EncryptionHelper.EncryptFile(password, fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess));
+                        EncryptionHelper.EncryptFile(password, fileToProcess, FileHelper.encryptPath(fileToProcess,folderSrc,folderDst ,password));
                     }
                     break;
                 }
