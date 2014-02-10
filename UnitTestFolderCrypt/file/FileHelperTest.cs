@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CloudBackup.file;
+using System.Net;
 
 namespace CloudBackup.file
 {
@@ -113,7 +114,7 @@ namespace CloudBackup.file
             Assert.AreEqual(cryptPaths.Length, paths.Length);
             for (int i = 1; i < paths.Length; i++)
             {
-                Assert.AreEqual(cryptPaths[i], EncryptionHelper.EncryptString(paths[i], KEY_AES));
+                Assert.AreEqual(cryptPaths[i], WebUtility.UrlEncode(EncryptionHelper.EncryptString(paths[i], KEY_AES)));
             }
         }
 
