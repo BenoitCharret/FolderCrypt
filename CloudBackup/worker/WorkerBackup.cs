@@ -31,17 +31,24 @@ namespace CloudBackup
             Console.WriteLine("nb Files to process: {0}", filesToProcess.Length);
             int count = 0;
             int length = filesToProcess.Length;
-
-            startWorkHandler(this, new worker.StartEventArgs(length,0));
-
+            if (startWorkHandler != null)
+            {
+                startWorkHandler(this, new worker.StartEventArgs(length, 0));
+            }
             foreach (string fileToProcess in filesToProcess)
             {
                 while (!_shouldStop)
                 {
                     count++;
-                    startWorkHandler(this, new StartEventArgs(length, count));
+                    if (startWorkHandler != null)
+                    {
+                        startWorkHandler(this, new StartEventArgs(length, count));
+                    }
                     string encryptPath = FileHelper.encryptPath(fileToProcess, folderSrc, folderDst, password);
-                    updateTextHandler(this, new UpdateTextEventArgs(String.Format("{0}/{1} : traitement de {2} -> {3}", new object[] { count, length, fileToProcess, encryptPath })));
+                    if (updateTextHandler != null)
+                    {
+                        updateTextHandler(this, new UpdateTextEventArgs(String.Format("{0}/{1} : traitement de {2} -> {3}", new object[] { count, length, fileToProcess, encryptPath })));
+                    }
                     if (needEncryption(fileToProcess, encryptPath))
                     {
                         // if dest file already exists but name is not crypted we rename it

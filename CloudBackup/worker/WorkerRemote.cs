@@ -10,9 +10,9 @@ using CloudBackup.worker;
 
 namespace CloudBackup
 {
-    class WorkerRemote:Worker
+    class WorkerRemote : Worker
     {
-         private String folderSrc;
+        private String folderSrc;
         private String folderDst;
         private string password;
         public event StartWorkHandler startWorkHandler;
@@ -33,17 +33,26 @@ namespace CloudBackup
             Console.WriteLine("nb Files to process: {0}", filesToProcess.Length);
             int count = 0;
             int length = filesToProcess.Length;
-            startWorkHandler(this, new worker.StartEventArgs(length, 0));
+            if (startWorkHandler != null)
+            {
+                startWorkHandler(this, new worker.StartEventArgs(length, 0));
+            }
             foreach (string fileToProcess in filesToProcess)
             {
                 while (!_shouldStop)
                 {
                     count++;
-                    startWorkHandler(this, new StartEventArgs(length, count));
-                    updateTextHandler(this, new UpdateTextEventArgs(String.Format("{0}/{1} : traitement de {2} -> {3}", new object[] { count, length, fileToProcess, FileHelper.decryptPath(fileToProcess, folderSrc, folderDst, password) })));
+                    if (startWorkHandler != null)
+                    {
+                        startWorkHandler(this, new StartEventArgs(length, count));
+                    }
+                    if (updateTextHandler != null)
+                    {
+                        updateTextHandler(this, new UpdateTextEventArgs(String.Format("{0}/{1} : traitement de {2} -> {3}", new object[] { count, length, fileToProcess, FileHelper.decryptPath(fileToProcess, folderSrc, folderDst, password) })));
+                    }
                     if (needDecryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
                     {
-                        EncryptionHelper.DecryptFile(password, fileToProcess, FileHelper.decryptPath(fileToProcess,folderSrc,folderDst,password));                        
+                        EncryptionHelper.DecryptFile(password, fileToProcess, FileHelper.decryptPath(fileToProcess, folderSrc, folderDst, password));
                     }
                     break;
                 }
@@ -63,6 +72,6 @@ namespace CloudBackup
             return true;
         }
 
-       
+
     }
 }
