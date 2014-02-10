@@ -18,7 +18,9 @@ namespace CloudBackup
         private Worker worker;
         Thread workerThread;
 
-        
+        private delegate void PorgressBarDelegateHandler(int length, int value);
+        private PorgressBarDelegateHandler ProgressBarDelegate;
+
 
         public Form1()
         {
@@ -29,11 +31,14 @@ namespace CloudBackup
             radioButtonBackup.Checked = configuration.isBackup;
             radioButtonRemote.Checked = !configuration.isBackup;
             textBoxPassword.Text = configuration.password;
+
+            // init delegate
+            ProgressBarDelegate = new PorgressBarDelegateHandler(UpdateProgressBar);
         }
 
         private void buttonFolderCrypt_Click(object sender, EventArgs e)
         {
-            DialogResult result=folderBrowserDialog1.ShowDialog();
+            DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
                 configuration.folderPathCipher = folderBrowserDialog1.SelectedPath;
@@ -53,7 +58,7 @@ namespace CloudBackup
 
         private void buttonGo_Click(object sender, EventArgs e)
         {
-            
+
             configuration.password = textBoxPassword.Text;
             configuration.isBackup = radioButtonBackup.Checked;
             new config.ConfigurationManager().saveConfiguration(configuration);
@@ -66,16 +71,21 @@ namespace CloudBackup
                 worker = new WorkerRemote(configuration);
             }
             worker.startWorkHandler += new StartWorkHandler(WorkChanged);
-           //workerThread =new Thread(worker.DoWork);
-           //workerThread.Start();
-            worker.DoWork();
-            
+            workerThread = new Thread(worker.DoWork);
+            workerThread.Start();
+            //worker.DoWork();
+
         }
 
         private void WorkChanged(object sender, StartEventArgs e)
         {
-            this.progressBar1.Maximum = e.Length;
-            this.progressBar1.Value = e.Count;
+            this.Invoke(this.ProgressBarDelegate, new object[] { e.Length, e.Count });
+        }
+
+        private void UpdateProgressBar(int length, int value)
+        {
+            this.progressBar1.Maximum = length;
+            this.progressBar1.Value = value;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -88,11 +98,11 @@ namespace CloudBackup
             {
                 worker.RequestStop();
             }
-            if (workerThread != null )
+            if (workerThread != null)
             {
                 workerThread.Join();
             }
         }
-     
+
     }
 }
