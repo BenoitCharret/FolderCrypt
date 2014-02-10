@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +36,10 @@ namespace CloudBackup.file
                 if (folder != null && folder != "")
                 {
                     sBuilder.Append("\\");
-                    sBuilder.Append(EncryptionHelper.EncryptString(folder, key));
+                    string encodedPath = EncryptionHelper.EncryptString(folder, key);
+                    encodedPath = WebUtility.UrlEncode(encodedPath);
+                    sBuilder.Append(encodedPath);
+                    Console.WriteLine("{0}->{1}", folder, encodedPath);
                 }
             }
 
@@ -56,7 +60,8 @@ namespace CloudBackup.file
                 if (folder != null && folder != "")
                 {
                     sBuilder.Append("\\");
-                    sBuilder.Append(EncryptionHelper.DecryptString(folder, key));
+                    string encodedPath = WebUtility.UrlDecode(folder);
+                    sBuilder.Append(EncryptionHelper.DecryptString(encodedPath, key));
                 }
             }
 
