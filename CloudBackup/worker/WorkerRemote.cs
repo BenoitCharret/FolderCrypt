@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CloudBackup.file;
+using CloudBackup.worker;
 
 namespace CloudBackup
 {
@@ -15,6 +16,7 @@ namespace CloudBackup
         private String folderDst;
         private string password;
         public event StartWorkHandler startWorkHandler;
+        public event UpdateTextHandler updateTextHandler;
 
         public WorkerRemote(config.Configuration configuration)
         {
@@ -37,8 +39,8 @@ namespace CloudBackup
                 while (!_shouldStop)
                 {
                     count++;
-                    startWorkHandler(this, new worker.StartEventArgs(length, count));
-                    Console.WriteLine("traitement de {0}/{1}", count, length);
+                    startWorkHandler(this, new StartEventArgs(length, count));
+                    updateTextHandler(this, new UpdateTextEventArgs(String.Format("{0}/{1} : traitement de {2} -> {3}", new object[] { count, length, fileToProcess, FileHelper.decryptPath(fileToProcess, folderSrc, folderDst, password) })));
                     if (needDecryption(fileToProcess, FileHelper.translateFilemame(folderSrc, folderDst, fileToProcess)))
                     {
                         EncryptionHelper.DecryptFile(password, fileToProcess, FileHelper.decryptPath(fileToProcess,folderSrc,folderDst,password));                        

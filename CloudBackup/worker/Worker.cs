@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 namespace CloudBackup
 {
     delegate void StartWorkHandler(object sender, StartEventArgs e);
-    
+    delegate void UpdateTextHandler(object sender, UpdateTextEventArgs e);
 
     interface Worker
     {
         event StartWorkHandler startWorkHandler;
+        event UpdateTextHandler updateTextHandler;
         
         void DoWork(); 
         void RequestStop();

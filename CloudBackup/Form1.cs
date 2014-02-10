@@ -18,9 +18,11 @@ namespace CloudBackup
         private Worker worker;
         Thread workerThread;
 
-        private delegate void PorgressBarDelegateHandler(int length, int value);
-        private PorgressBarDelegateHandler ProgressBarDelegate;
+        private delegate void ProgressBarDelegateHandler(int length, int value);
+        private ProgressBarDelegateHandler ProgressBarDelegate;
 
+        private delegate void TextBoxDelegateHandler(string text);
+        private TextBoxDelegateHandler TextBoxDelegate;
 
         public Form1()
         {
@@ -33,7 +35,8 @@ namespace CloudBackup
             textBoxPassword.Text = configuration.password;
 
             // init delegate
-            ProgressBarDelegate = new PorgressBarDelegateHandler(UpdateProgressBar);
+            ProgressBarDelegate = new ProgressBarDelegateHandler(UpdateProgressBar);
+            TextBoxDelegate = new TextBoxDelegateHandler(UpdateTextBox);
         }
 
         private void buttonFolderCrypt_Click(object sender, EventArgs e)
@@ -71,10 +74,16 @@ namespace CloudBackup
                 worker = new WorkerRemote(configuration);
             }
             worker.startWorkHandler += new StartWorkHandler(WorkChanged);
+            worker.updateTextHandler += new UpdateTextHandler(UpdateTextChanged);
             workerThread = new Thread(worker.DoWork);
             workerThread.Start();
             //worker.DoWork();
 
+        }
+
+        private void UpdateTextChanged(object sender, UpdateTextEventArgs e)
+        {
+            this.Invoke(this.TextBoxDelegate, new object[] { e.Text });
         }
 
         private void WorkChanged(object sender, StartEventArgs e)
@@ -86,6 +95,17 @@ namespace CloudBackup
         {
             this.progressBar1.Maximum = length;
             this.progressBar1.Value = value;
+            if (value == 0)
+            {
+                this.textBoxUpdate.Clear();
+
+            }
+        }
+
+        private void UpdateTextBox(string text)
+        {            
+            this.textBoxUpdate.AppendText(text);            
+            this.textBoxUpdate.AppendText(System.Environment.NewLine);
         }
 
         private void Form1_Load(object sender, EventArgs e)

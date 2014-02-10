@@ -40,8 +40,9 @@
             this.buttonGo = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonBackup = new System.Windows.Forms.RadioButton();
             this.radioButtonRemote = new System.Windows.Forms.RadioButton();
+            this.radioButtonBackup = new System.Windows.Forms.RadioButton();
+            this.textBoxUpdate = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,7 +128,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(44, 277);
+            this.progressBar1.Location = new System.Drawing.Point(44, 200);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(435, 21);
             this.progressBar1.TabIndex = 11;
@@ -143,17 +144,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Type d\'opération";
             // 
-            // radioButtonBackup
-            // 
-            this.radioButtonBackup.AutoSize = true;
-            this.radioButtonBackup.Location = new System.Drawing.Point(6, 19);
-            this.radioButtonBackup.Name = "radioButtonBackup";
-            this.radioButtonBackup.Size = new System.Drawing.Size(62, 17);
-            this.radioButtonBackup.TabIndex = 0;
-            this.radioButtonBackup.TabStop = true;
-            this.radioButtonBackup.Text = "Backup";
-            this.radioButtonBackup.UseVisualStyleBackColor = true;
-            // 
             // radioButtonRemote
             // 
             this.radioButtonRemote.AutoSize = true;
@@ -165,11 +155,32 @@
             this.radioButtonRemote.Text = "remote";
             this.radioButtonRemote.UseVisualStyleBackColor = true;
             // 
+            // radioButtonBackup
+            // 
+            this.radioButtonBackup.AutoSize = true;
+            this.radioButtonBackup.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonBackup.Name = "radioButtonBackup";
+            this.radioButtonBackup.Size = new System.Drawing.Size(62, 17);
+            this.radioButtonBackup.TabIndex = 0;
+            this.radioButtonBackup.TabStop = true;
+            this.radioButtonBackup.Text = "Backup";
+            this.radioButtonBackup.UseVisualStyleBackColor = true;
+            // 
+            // textBoxUpdate
+            // 
+            this.textBoxUpdate.Location = new System.Drawing.Point(44, 238);
+            this.textBoxUpdate.Multiline = true;
+            this.textBoxUpdate.Name = "textBoxUpdate";
+            this.textBoxUpdate.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxUpdate.Size = new System.Drawing.Size(935, 87);
+            this.textBoxUpdate.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 337);
+            this.ClientSize = new System.Drawing.Size(991, 337);
+            this.Controls.Add(this.textBoxUpdate);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.buttonGo);
@@ -207,6 +218,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioButtonRemote;
         private System.Windows.Forms.RadioButton radioButtonBackup;
+        private System.Windows.Forms.TextBox textBoxUpdate;
     }
 }
 

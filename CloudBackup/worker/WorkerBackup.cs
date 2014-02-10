@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using CloudBackup.file;
+using CloudBackup.worker;
 
 namespace CloudBackup
 {
@@ -15,6 +16,7 @@ namespace CloudBackup
         private String folderDst;
         private string password;
         public event StartWorkHandler startWorkHandler;
+        public event UpdateTextHandler updateTextHandler;
 
         public WorkerBackup(config.Configuration configuration)
         {
@@ -37,9 +39,9 @@ namespace CloudBackup
                 while (!_shouldStop)
                 {
                     count++;
-                    startWorkHandler(this, new worker.StartEventArgs(length, count));
-                    Console.WriteLine("traitement de {0}/{1}", count, length);
+                    startWorkHandler(this, new StartEventArgs(length, count));
                     string encryptPath = FileHelper.encryptPath(fileToProcess, folderSrc, folderDst, password);
+                    updateTextHandler(this, new UpdateTextEventArgs(String.Format("{0}/{1} : traitement de {2} -> {3}", new object[] { count, length, fileToProcess, encryptPath })));
                     if (needEncryption(fileToProcess, encryptPath))
                     {
                         // if dest file already exists but name is not crypted we rename it
